@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Real-Time Fraud Detection in Online Employment Portals using Gemini 2.0 AI">
+    <meta name="author" content="Venkata Sai Tamarapalli & Team">
+    <!-- Forces the browser to use HTTPS for all resources -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>AI Model Metrics Presentation</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: { 850: '#1f1f22', 900: '#18181b', 950: '#09090b' },
+                        brand: { 
+                            blue: '#3b82f6',     
+                            magenta: '#d946ef',  
+                            violet: '#8b5cf6',   
+                            emerald: '#10b981',  
+                            rose: '#f43f5e'      
+                        }
+                    },
+                    transitionTimingFunction: {
+                        'spring': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Hidden Scrollbars */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Elegant Custom Scrollbar */
+        .slide-wrapper::-webkit-scrollbar { width: 6px; }
+        .slide-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .slide-wrapper::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.3); border-radius: 10px; }
+        .slide-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(217, 70, 239, 0.6); }
+
+        /* Snappy Pro Animations */
+        .anim-fade-up, .anim-fade-down, .anim-fade, .anim-scale-up, .anim-slide-left, .anim-slide-right {
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Pro Text Blur Reveal */
+        .anim-text-reveal {
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(20px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                        filter 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Inactive States */
+        .slide-wrapper:not(.is-active) .anim-fade-up { opacity: 0; transform: translateY(30px); }
+        .slide-wrapper:not(.is-active) .anim-fade-down { opacity: 0; transform: translateY(-30px); }
+        .slide-wrapper:not(.is-active) .anim-fade { opacity: 0; }
+        .slide-wrapper:not(.is-active) .anim-scale-up { opacity: 0; transform: scale(0.90); }
+        .slide-wrapper:not(.is-active) .anim-slide-left { opacity: 0; transform: translateX(-40px); }
+        .slide-wrapper:not(.is-active) .anim-slide-right { opacity: 0; transform: translateX(40px); }
+
+        /* Active States */
+        .slide-wrapper.is-active .anim-fade-up,
+        .slide-wrapper.is-active .anim-fade-down,
+        .slide-wrapper.is-active .anim-slide-left,
+        .slide-wrapper.is-active .anim-slide-right { opacity: 1; transform: translate(0, 0); }
+        .slide-wrapper.is-active .anim-fade { opacity: 1; }
+        .slide-wrapper.is-active .anim-scale-up { opacity: 1; transform: scale(1); }
+        .slide-wrapper.is-active .anim-text-reveal { opacity: 1; filter: blur(0); transform: translateY(0); }
+
+        /* Delays */
+        .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; } .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; } .delay-600 { transition-delay: 600ms; }
+        .delay-700 { transition-delay: 700ms; } .delay-800 { transition-delay: 800ms; }
+        .delay-900 { transition-delay: 900ms; } .delay-1000 { transition-delay: 1000ms; }
+        .delay-1100 { transition-delay: 1100ms; } .delay-1200 { transition-delay: 1200ms; }
+
+        /* Graph Animations */
+        .anim-height { height: 0 !important; transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important; }
+        .slide-wrapper.is-active .anim-height { height: var(--target-height) !important; transition-delay: var(--delay, 0ms) !important; }
+        
+        .anim-width { width: 0 !important; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important; }
+        .slide-wrapper.is-active .anim-width { width: var(--target-width) !important; transition-delay: var(--delay, 200ms) !important; }
+
+        .anim-dash { stroke-dasharray: 0, 100 !important; transition: stroke-dasharray 1.5s cubic-bezier(0.16, 1, 0.3, 1) !important; }
+        .slide-wrapper.is-active .anim-dash { stroke-dasharray: var(--dash-target), 100 !important; transition-delay: var(--delay, 0ms) !important; }
+
+        .anim-path-draw { stroke-dasharray: 300; stroke-dashoffset: 300; transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .slide-wrapper.is-active .anim-path-draw { stroke-dashoffset: 0; transition-delay: var(--delay, 0ms); }
+        .anim-fill-fade { opacity: 0; transition: opacity 1.5s ease-out; }
+        .slide-wrapper.is-active .anim-fill-fade { opacity: 1; transition-delay: var(--delay, 0ms); }
+
+        @keyframes drawPathROC { from { stroke-dasharray: 0, 2000; } to { stroke-dasharray: 2000, 2000; } }
+        .slide-wrapper.is-active .path-animation-roc { animation: drawPathROC 2s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 300ms; stroke-dasharray: 0, 2000; }
+        
+        /* Pro Text Gradients */
+        .text-gradient-primary { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to right, #3b82f6, #8b5cf6, #d946ef); }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 text-slate-200 font-sans flex flex-col items-center justify-center overflow-hidden selection:bg-brand-magenta/40 p-4 md:p-8">
+
+    <!-- Subtle Ambient Background -->
+    <div class="fixed top-[-10%] left-[-5%] w-[40%] h-[40%] bg-brand-blue/15 rounded-full blur-[150px] pointer-events-none animate-pulse-slow"></div>
+    <div class="fixed bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-brand-magenta/15 rounded-full blur-[150px] pointer-events-none animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+    <!-- Massive Pro Modal Container -->
+    <div class="relative w-full w-[95vw] max-w-[1600px] h-[90vh] min-h-[700px] max-h-[1080px] bg-zinc-950/80 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_0_80px_-15px_rgba(217,70,239,0.25)] flex flex-col overflow-hidden">
+        
+        <!-- Header -->
+        <div class="px-6 py-4 md:px-8 md:py-5 border-b border-white/5 flex justify-between items-center z-20 bg-zinc-950/50 shrink-0">
+            <div class="flex items-center space-x-4 text-brand-blue shrink-0">
+                <i data-lucide="shield-check" class="w-6 h-6 md:w-7 md:h-7"></i>
+                <span class="font-bold tracking-[0.25em] uppercase text-xs md:text-sm text-white/90">AI Security Agent</span>
+            </div>
+            <div id="slide-title-display" class="text-zinc-400 font-medium tracking-wide text-xs md:text-sm truncate pl-4 text-right"></div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full h-[3px] bg-zinc-900 z-20 shrink-0">
+            <div id="progress-fill" class="h-full bg-gradient-to-r from-brand-blue via-brand-violet to-brand-magenta transition-all duration-500 ease-out shadow-[0_0_15px_rgba(217,70,239,0.6)]" style="width: 0%"></div>
+        </div>
+
+        <!-- Dynamic Content Area -->
+        <div id="slides-area" class="flex-1 relative w-full h-full overflow-hidden flex flex-col min-h-0">
+            <!-- Slides Injected Here -->
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="px-4 py-3 md:px-8 md:py-5 bg-zinc-950/90 border-t border-white/5 flex justify-between items-center z-20 shrink-0">
+            <button id="btn-prev" onclick="prevSlide()" class="group px-4 py-2.5 md:px-6 md:py-3 rounded-xl flex items-center transition-all duration-300 text-zinc-300 bg-zinc-900 border border-white/5 hover:bg-zinc-800 hover:border-white/10 text-xs md:text-sm font-bold tracking-wide">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="hidden sm:inline">Previous</span>
+            </button>
+            
+            <!-- Dots -->
+            <div id="dots-container" class="flex space-x-2 md:space-x-3 overflow-x-auto max-w-[50%] md:max-w-xl px-4 hide-scrollbar items-center py-2">
+                <!-- Dots injected via JS -->
+            </div>
+
+            <button id="btn-next" onclick="nextSlide()" class="group px-4 py-2.5 md:px-6 md:py-3 rounded-xl flex items-center transition-all duration-300 text-white bg-white/10 border border-white/10 hover:bg-white/20 hover:shadow-[0_0_25px_rgba(217,70,239,0.3)] text-xs md:text-sm font-bold tracking-wide">
+                <span class="hidden sm:inline">Next</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- PROPORTIONAL COMPONENT TEMPLATES (UPSCALED TEXT) ---
+        const CodeEditor = (filename, lines, delay = 300) => `
+            <div class="anim-scale-up rounded-2xl overflow-hidden bg-[#09090b] border border-white/10 shadow-2xl w-full delay-${delay} max-h-full flex flex-col">
+                <div class="px-4 py-3 bg-[#18181b] border-b border-white/5 flex items-center space-x-3 shrink-0">
+                    <div class="flex space-x-2 shrink-0">
+                        <div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+                        <div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+                        <div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+                    </div>
+                    <span class="ml-4 text-xs md:text-sm font-mono text-zinc-400 flex items-center justify-center w-full pr-8 tracking-wide">
+                        <i data-lucide="file-code" class="w-4 h-4 mr-2 text-brand-magenta"></i> ${filename}
+                    </span>
+                </div>
+                <div class="p-5 md:p-6 font-mono text-sm md:text-base leading-relaxed overflow-y-auto overflow-x-auto text-zinc-300 bg-[#09090b] flex-1 hide-scrollbar">
+                    ${lines.map((line, i) => `
+                        <div class="flex hover:bg-white/[0.03] px-2 py-0.5 rounded transition-colors">
+                            <span class="w-8 text-zinc-600 select-none text-right mr-4 shrink-0">${i + 1}</span>
+                            <div class="whitespace-pre">${line}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const InfoCard = (icon, title, desc, color, glowColor, delay) => `
+            <div class="anim-fade-up flex flex-col p-6 rounded-2xl border border-white/5 bg-zinc-900/50 backdrop-blur-xl hover:bg-zinc-800/50 hover:border-white/10 hover:shadow-[0_15px_40px_${glowColor}] transition-all duration-300 delay-${delay} h-full group">
+                <div class="p-3 bg-[#09090b] rounded-xl w-fit mb-5 border border-white/5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="${icon}" class="w-8 h-8 ${color}"></i>
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold text-white mb-3 tracking-wide anim-text-reveal delay-${delay + 100}">${title}</h3>
+                <p class="text-zinc-400 text-sm md:text-base leading-relaxed anim-text-reveal delay-${delay + 200}">${desc}</p>
+            </div>
+        `;
+
+        const DoughnutChart = (title, safePercent, delay) => `
+            <div class="anim-fade-up delay-${delay} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 h-full w-full justify-between hover:border-white/10 transition-colors">
+                <h3 class="text-zinc-300 font-bold text-xs md:text-sm uppercase tracking-widest text-center mb-4 flex items-center justify-center anim-text-reveal"><i data-lucide="pie-chart" class="w-4 h-4 mr-2 text-brand-emerald"></i>${title}</h3>
+                <div class="flex-1 flex flex-col items-center justify-center min-h-[140px]">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40">
+                        <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90 drop-shadow-2xl">
+                            <path class="text-brand-rose/20" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="text-brand-emerald anim-dash" stroke-dasharray="0, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="--dash-target: ${safePercent}; --delay: ${delay + 200}ms; stroke-linecap: round;" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-white font-black text-2xl md:text-3xl anim-text-reveal delay-${delay + 300}">${safePercent}%</span>
+                            <span class="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.25em] mt-1">Safe</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-5 mt-4 text-[10px] md:text-xs font-medium text-zinc-400 anim-text-reveal delay-${delay + 400}">
+                    <span class="flex items-center"><div class="w-2 h-2 rounded-full bg-brand-emerald mr-2 shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div> Safe</span>
+                    <span class="flex items-center"><div class="w-2 h-2 rounded-full bg-brand-rose mr-2"></div> Fake</span>
+                </div>
+            </div>
+        `;
+
+        const BarChartVertical = (title, data, delay) => `
+            <div class="anim-fade-up delay-${delay} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 h-full w-full justify-between hover:border-white/10 transition-colors">
+                <h3 class="text-zinc-300 font-bold text-xs md:text-sm uppercase tracking-widest text-center mb-4 flex items-center justify-center anim-text-reveal"><i data-lucide="bar-chart-2" class="w-4 h-4 mr-2 text-brand-blue"></i>${title}</h3>
+                <div class="flex-1 flex items-end justify-around border-b border-l border-white/10 pb-2 pl-2 pt-8 min-h-[140px]">
+                    ${data.map((d, i) => `
+                        <div class="flex flex-col items-center w-full group h-full justify-end relative">
+                            <span class="text-xs md:text-sm font-mono font-bold text-white mb-2 opacity-0 group-hover:opacity-100 transition-all absolute -top-6">${d.val}%</span>
+                            <div class="w-full max-w-[35px] md:max-w-[45px] ${d.color} rounded-t-md anim-height relative shadow-[0_0_20px_${d.shadowColor}]" style="--target-height: ${d.val}%; --delay: ${delay + 200 + (i*150)}ms;">
+                                <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-md"></div>
+                            </div>
+                            <span class="text-[9px] md:text-xs text-zinc-400 font-medium mt-3 whitespace-nowrap text-center tracking-wide anim-text-reveal delay-${delay + 300}">${d.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const BarChartHorizontal = (title, data, delay) => `
+            <div class="anim-fade-up delay-${delay} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 h-full w-full justify-between hover:border-white/10 transition-colors">
+                <h3 class="text-zinc-300 font-bold text-xs md:text-sm uppercase tracking-widest text-center mb-4 flex items-center justify-center anim-text-reveal"><i data-lucide="map-pin" class="w-4 h-4 mr-2 text-brand-magenta"></i>${title}</h3>
+                <div class="flex-1 flex flex-col justify-center border-l border-b border-white/10 pb-2 pl-4 gap-5 pt-2 min-h-[140px]">
+                    ${data.map((d, i) => `
+                        <div class="flex flex-col w-full group relative">
+                            <div class="flex justify-between text-xs md:text-sm font-medium text-zinc-400 mb-2 anim-text-reveal delay-${delay + 200 + (i*100)}">
+                                <span class="tracking-wide">${d.label}</span>
+                                <span class="font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity">${d.val}%</span>
+                            </div>
+                            <div class="h-3 md:h-4 w-full bg-[#09090b] rounded-full overflow-hidden border border-white/5">
+                                <div class="h-full ${d.color} anim-width relative shadow-[0_0_15px_${d.shadowColor}] rounded-full" style="--target-width: ${d.val}%; --delay: ${delay + 200 + (i*150)}ms;"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const AreaChart = (title, delay) => `
+            <div class="anim-fade-up delay-${delay} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 h-full w-full justify-between hover:border-white/10 transition-colors">
+                <h3 class="text-zinc-300 font-bold text-xs md:text-sm uppercase tracking-widest text-center mb-3 flex items-center justify-center anim-text-reveal"><i data-lucide="trending-up" class="w-4 h-4 mr-2 text-yellow-400"></i>${title}</h3>
+                <div class="flex-1 relative border-b border-l border-white/10 mt-2 min-h-[140px]">
+                    <svg preserveAspectRatio="none" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full overflow-visible">
+                        <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" stroke-dasharray="2 2" />
+                        <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" stroke-dasharray="2 2" />
+                        <line x1="0" y1="75" x2="100" y2="75" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" stroke-dasharray="2 2" />
+                        <path class="text-yellow-400 anim-path-draw drop-shadow-[0_0_12px_rgba(250,204,21,0.6)]" stroke-width="3" stroke="currentColor" fill="none" d="M0,90 Q15,85 25,60 T50,40 T75,20 T100,10" style="--delay: ${delay + 200}ms; stroke-linecap: round;"></path>
+                        <path class="text-yellow-500/20 anim-fill-fade" fill="currentColor" d="M0,90 Q15,85 25,60 T50,40 T75,20 T100,10 L100,100 L0,100 Z" style="--delay: ${delay + 600}ms;"></path>
+                    </svg>
+                </div>
+                <div class="flex justify-between text-[9px] md:text-xs font-bold text-zinc-500 mt-2 px-1 tracking-widest anim-text-reveal delay-${delay + 300}">
+                    <span>MON</span><span>WED</span><span>FRI</span><span>SUN</span>
+                </div>
+            </div>
+        `;
+
+        const MetricRow = (icon, title, val, desc, color, delay) => `
+            <div class="anim-fade-up delay-${delay} flex items-center justify-between p-5 md:p-6 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/80 transition-colors group">
+                <div class="flex items-center space-x-5">
+                    <div class="p-3 bg-[#09090b] rounded-xl border border-white/5 group-hover:scale-110 transition-transform">
+                        <i data-lucide="${icon}" class="w-6 h-6 ${color}"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-zinc-200 text-lg md:text-xl font-bold tracking-wide anim-text-reveal delay-${delay + 100}">${title}</h3>
+                        <p class="text-zinc-500 text-xs md:text-sm mt-1 anim-text-reveal delay-${delay + 200}">${desc}</p>
+                    </div>
+                </div>
+                <div class="text-3xl md:text-5xl font-black ${color} tracking-tight anim-text-reveal delay-${delay + 300}">${val}</div>
+            </div>
+        `;
+
+        const MatrixCell = (title, count, desc, type, delay) => {
+            const styles = {
+                success: 'bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald shadow-[0_0_20px_rgba(16,185,129,0.15)]',
+                success_scam: 'bg-brand-violet/10 border-brand-violet/30 text-brand-violet shadow-[0_0_20px_rgba(139,92,246,0.15)]',
+                warning: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.15)]',
+                danger: 'bg-brand-rose/10 border-brand-rose/30 text-brand-rose shadow-[0_0_20px_rgba(244,63,94,0.15)]',
+            };
+            return `
+                <div class="anim-scale-up p-5 md:p-8 rounded-2xl border backdrop-blur-xl flex flex-col justify-center items-center text-center hover:scale-[1.03] transition-transform ${styles[type]} delay-${delay}">
+                    <div class="text-4xl md:text-6xl font-black mb-2 tracking-tighter drop-shadow-md">${count}</div>
+                    <div class="font-bold text-xs md:text-sm mb-1 uppercase tracking-[0.2em] text-white">${title}</div>
+                    <div class="text-[10px] md:text-xs opacity-80 font-medium tracking-wide">${desc}</div>
+                </div>
+            `;
+        };
+
+        // --- OPTIMIZED METRIC DEEP DIVE DASHBOARD COMPONENT ---
+        const MetricDeepDive = (title, score, formula, desc, donutData, barData, compData, themeClass, shadowClass, delay) => `
+            <div class="w-full flex flex-col justify-center max-w-[1200px] mx-auto h-full px-6 py-4">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 md:mb-10 gap-6">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight flex items-center anim-text-reveal">
+                            ${title} <span class="ml-4 px-3 py-1 rounded-full bg-white/5 ${themeClass} text-sm md:text-lg font-mono border border-white/10 shadow-[0_0_15px_${shadowClass}]">${score}</span>
+                        </h2>
+                        <p class="text-sm md:text-lg text-zinc-400 mt-3 max-w-2xl leading-relaxed anim-text-reveal delay-200">${desc}</p>
+                    </div>
+                    <div class="hidden lg:block text-right bg-zinc-900/50 p-4 rounded-xl border border-white/5 anim-scale-up delay-300">
+                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1.5 font-bold">Mathematical Formula</div>
+                        <code class="text-sm font-mono text-zinc-300 font-bold">${formula}</code>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 flex-1 min-h-0 items-stretch">
+                    <!-- Column 1: Donut -->
+                    <div class="anim-fade-up delay-${delay} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 items-center justify-between hover:border-white/10 transition-colors group">
+                        <h3 class="text-xs md:text-sm font-bold text-zinc-300 uppercase tracking-widest text-center">${donutData.title}</h3>
+                        <div class="relative w-28 h-28 md:w-36 h-36 my-6">
+                            <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+                                <path class="text-zinc-800" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="${themeClass} anim-dash drop-shadow-[0_0_12px_${shadowClass}]" stroke-dasharray="0, 100" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="--dash-target: ${donutData.percent}; --delay: ${delay + 300}ms; stroke-linecap: round;" />
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center group-hover:scale-110 transition-transform">
+                                <span class="text-white font-black text-2xl md:text-3xl">${donutData.percent}%</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-4 w-full text-[10px] md:text-xs font-medium text-zinc-400">
+                            <span class="flex items-center"><div class="w-2 h-2 rounded-full ${donutData.color1} mr-2 shadow-[0_0_8px_${shadowClass}]"></div> ${donutData.label1}</span>
+                            <span class="flex items-center"><div class="w-2 h-2 rounded-full ${donutData.color2} mr-2"></div> ${donutData.label2}</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Stacked Bar -->
+                    <div class="anim-fade-up delay-${delay + 200} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 justify-between hover:border-white/10 transition-colors">
+                        <h3 class="text-xs md:text-sm font-bold text-zinc-300 uppercase tracking-widest text-center mb-5">${barData.title}</h3>
+                        <div class="flex-1 flex flex-col justify-center space-y-5 md:space-y-6">
+                            ${barData.items.map((item, i) => `
+                                <div class="w-full">
+                                    <div class="flex justify-between text-xs md:text-sm mb-2 font-medium">
+                                        <span class="text-zinc-400 tracking-wide">${item.label}</span>
+                                        <span class="font-mono text-white font-bold">${item.val}${item.isPercent ? '%' : ''}</span>
+                                    </div>
+                                    <div class="h-3 md:h-4 w-full bg-[#09090b] rounded-full overflow-hidden border border-white/5">
+                                        <div class="h-full ${item.color} anim-width rounded-full relative" style="--target-width: ${item.percent}%; --delay: ${delay + 500 + (i*150)}ms;">
+                                            <div class="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="text-center mt-5 text-[9px] md:text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-bold">${barData.footer}</div>
+                    </div>
+
+                    <!-- Column 3: Comparison -->
+                    <div class="anim-fade-up delay-${delay + 400} flex flex-col p-5 md:p-6 bg-zinc-900/50 rounded-2xl border border-white/5 justify-between hover:border-white/10 transition-colors">
+                        <h3 class="text-xs md:text-sm font-bold text-zinc-300 uppercase tracking-widest text-center mb-5">${compData.title}</h3>
+                        <div class="flex-1 flex items-end justify-around border-b border-white/10 pb-2 pt-6 px-2 md:px-6">
+                            <div class="flex flex-col items-center group w-full">
+                                <span class="text-[10px] md:text-xs font-mono font-bold text-zinc-400 mb-2 transition-transform group-hover:-translate-y-1">${compData.val1}%</span>
+                                <div class="w-12 sm:w-14 md:w-16 bg-zinc-700 rounded-t-md anim-height" style="--target-height: ${compData.val1}%; --delay: ${delay + 700}ms;"></div>
+                                <span class="text-[9px] md:text-xs text-zinc-500 font-medium mt-3 text-center leading-tight tracking-wide">${compData.label1}</span>
+                            </div>
+                            <div class="flex flex-col items-center group w-full">
+                                <span class="text-xs md:text-sm font-mono ${themeClass} font-bold mb-2 transition-transform group-hover:-translate-y-1 drop-shadow-[0_0_8px_${shadowClass}]">${compData.val2}%</span>
+                                <div class="w-12 sm:w-14 md:w-16 ${compData.color2 || themeClass.replace('text-', 'bg-')} rounded-t-md anim-height relative shadow-[0_0_20px_${shadowClass}]" style="--target-height: ${compData.val2}%; --delay: ${delay + 850}ms;">
+                                    <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-md"></div>
+                                </div>
+                                <span class="text-[9px] md:text-xs text-white font-medium mt-3 text-center leading-tight tracking-wide">${compData.label2}</span>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4 text-[9px] md:text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-bold">Architectural Superiority</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // --- SLIDES DATA (MASSIVE TYPOGRAPHY UPGRADE & TEAM ADDED) ---
+        const slidesData = [
+            { 
+                title: 'Real-Time Fraud Detection', 
+                html: `
+                <div class="w-full flex flex-col justify-center items-center text-center max-w-5xl mx-auto h-full px-6">
+                    <div class="anim-scale-up p-5 md:p-8 bg-zinc-900/80 rounded-3xl border border-white/10 shadow-[0_0_60px_rgba(59,130,246,0.2)] mb-8">
+                        <i data-lucide="cpu" class="w-12 h-12 md:w-20 md:h-20 text-brand-blue animate-float"></i>
+                    </div>
+                    <h1 class="anim-text-reveal delay-100 text-4xl md:text-6xl lg:text-7xl font-extrabold text-gradient-primary leading-tight mb-6 tracking-tight drop-shadow-lg">
+                        Leveraging Large Language Models
+                    </h1>
+                    <h2 class="anim-text-reveal delay-300 text-lg md:text-2xl lg:text-3xl text-zinc-300 font-light leading-relaxed max-w-4xl">
+                        Real-Time Fraud Detection in Online Employment Portals using the <span class="font-medium text-white">Gemini 2.0 AI</span> Framework.
+                    </h2>
+                    <div class="anim-text-reveal delay-600 mt-12 md:mt-16 flex flex-col items-center">
+                        <div class="h-[2px] w-20 bg-gradient-to-r from-transparent via-zinc-500 to-transparent mb-5"></div>
+                        <p class="text-zinc-200 text-sm md:text-lg font-bold tracking-[0.2em] uppercase">Venkata Sai Tamarapalli</p>
+                        <p class="text-brand-magenta text-xs md:text-sm mt-2 tracking-[0.15em] uppercase font-bold">Aditya Degree College</p>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'The Origin & The Team',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14 max-w-7xl mx-auto h-full px-6">
+                    <!-- Left: Motivation -->
+                    <div class="w-full md:w-[45%] flex flex-col">
+                        <div class="anim-fade-down flex items-center space-x-4 mb-6 md:mb-8">
+                            <div class="p-3 bg-zinc-900 border border-white/10 rounded-xl shadow-lg">
+                                <i data-lucide="quote" class="w-6 h-6 text-brand-blue"></i>
+                            </div>
+                            <h2 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight">The Motivation</h2>
+                        </div>
+                        
+                        <div class="anim-scale-up delay-200 relative p-8 md:p-10 rounded-3xl bg-zinc-900/40 backdrop-blur-2xl border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-brand-blue to-brand-magenta"></div>
+                            <p class="anim-text-reveal delay-300 text-lg md:text-2xl leading-relaxed text-zinc-300 font-light italic">
+                                "Job portals are heavily polluted with fraudulent postings—such as fake roles asking for upfront training fees or data-entry scams. <br><br>
+                                <span class="text-white font-medium">I built this AI Agent as a security layer.</span> It utilizes generative AI to analyze context and filter out scams before the user even sees them."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Team -->
+                    <div class="w-full md:w-[55%] flex flex-col pt-6 md:pt-0">
+                        <div class="anim-fade-down delay-200 flex items-center space-x-4 mb-6 md:mb-8">
+                            <div class="p-3 bg-zinc-900 border border-white/10 rounded-xl shadow-lg">
+                                <i data-lucide="users" class="w-6 h-6 text-brand-magenta"></i>
+                            </div>
+                            <h2 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight">Project Team</h2>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            <!-- Lead - Full Width -->
+                            <div class="anim-text-reveal delay-300 md:col-span-2 p-4 md:p-5 rounded-2xl bg-gradient-to-r from-brand-blue/15 to-transparent border border-brand-blue/30 flex items-center justify-between group hover:border-brand-blue/60 transition-all shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-full bg-brand-blue/20 border border-brand-blue flex items-center justify-center text-brand-blue font-black text-lg shadow-[0_0_15px_rgba(59,130,246,0.5)]">VS</div>
+                                    <h3 class="text-white font-extrabold text-base md:text-xl tracking-wide group-hover:translate-x-1 transition-transform">Venkata Sai Tamarapalli</h3>
+                                </div>
+                                <span class="text-brand-blue text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold px-3 py-1 bg-brand-blue/10 rounded-full hidden sm:inline-block">Lead Developer</span>
+                            </div>
+
+                            <!-- Team Members (Grid) -->
+                            ${['Mouli Uppala', 'Swarna Kumari Bali', 'Sravanthi Battu', 'Uday Kiran Bevera', 'Nadipena Kiran Kumar', 'Bantupalli Tejeswara Rao', 'Khurshlda Roohi Mahammd'].map((name, i) => `
+                            <div class="anim-text-reveal flex items-center space-x-4 p-4 rounded-xl bg-zinc-900/40 border border-white/5 hover:bg-zinc-800/80 hover:border-brand-magenta/30 hover:shadow-[0_0_15px_rgba(217,70,239,0.15)] transition-all group cursor-default" style="transition-delay: ${400 + i*100}ms">
+                                <div class="w-2.5 h-2.5 rounded-full bg-zinc-700 group-hover:bg-brand-magenta group-hover:shadow-[0_0_10px_rgba(217,70,239,0.8)] transition-all duration-500 shrink-0"></div>
+                                <h3 class="text-zinc-300 font-semibold text-sm md:text-base tracking-wide group-hover:text-white group-hover:translate-x-1 transition-all duration-300 uppercase">${name}</h3>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'The Problem',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-6xl mx-auto h-full px-6">
+                    <h2 class="text-3xl md:text-5xl font-extrabold mb-10 md:mb-14 text-center text-white tracking-tight anim-text-reveal">A Polluted Job Market</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch min-h-0">
+                        ${InfoCard('alert-triangle', 'Fake Postings', 'Scammers post non-existent roles to collect resumes and personal data for identity theft and phishing schemes.', 'text-brand-rose', 'rgba(244,63,94,0.2)', 100)}
+                        ${InfoCard('banknote', 'Upfront Fee Fraud', 'Candidates are manipulated into paying for "mandatory training" or "company equipment" before starting.', 'text-yellow-400', 'rgba(250,204,21,0.2)', 300)}
+                        ${InfoCard('brain-circuit', 'Cognitive Overload', 'Job seekers waste hundreds of hours filtering through spam instead of applying to real, legitimate career opportunities.', 'text-brand-blue', 'rgba(59,130,246,0.2)', 500)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'The Proposed Solution',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-6xl mx-auto h-full px-6">
+                    <h2 class="text-3xl md:text-5xl font-extrabold mb-12 md:mb-20 text-center text-white tracking-tight anim-text-reveal">The Architectural Solution</h2>
+                    <div class="flex flex-col md:flex-row justify-between items-center relative gap-8 md:gap-0 lg:px-16">
+                        <div class="anim-fade hidden md:block absolute top-[35%] left-16 right-16 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
+                        
+                        <div class="anim-scale-up delay-200 flex flex-col items-center z-10 p-4 group">
+                            <div class="w-20 h-20 md:w-28 md:h-28 rounded-2xl border border-white/10 bg-[#09090b] flex items-center justify-center mb-4 md:mb-6 group-hover:border-brand-violet/50 group-hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"><i data-lucide="globe" class="w-10 h-10 md:w-12 md:h-12 text-brand-violet"></i></div>
+                            <h3 class="text-sm md:text-lg font-bold text-zinc-200 uppercase tracking-widest">1. Scrape</h3>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-2 text-center max-w-[120px] leading-relaxed">Live listings via JobSpy</p>
+                        </div>
+                        <div class="anim-scale-up delay-400 flex flex-col items-center z-10 p-4 group">
+                            <div class="w-20 h-20 md:w-28 md:h-28 rounded-2xl border border-white/10 bg-[#09090b] flex items-center justify-center mb-4 md:mb-6 group-hover:border-brand-magenta/50 group-hover:shadow-[0_0_30px_rgba(217,70,239,0.4)] transition-all"><i data-lucide="cpu" class="w-10 h-10 md:w-12 md:h-12 text-brand-magenta"></i></div>
+                            <h3 class="text-sm md:text-lg font-bold text-zinc-200 uppercase tracking-widest">2. Analyze</h3>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-2 text-center max-w-[120px] leading-relaxed">Semantics via Gemini 2.0</p>
+                        </div>
+                        <div class="anim-scale-up delay-600 flex flex-col items-center z-10 p-4 group">
+                            <div class="w-20 h-20 md:w-28 md:h-28 rounded-2xl border border-white/10 bg-[#09090b] flex items-center justify-center mb-4 md:mb-6 group-hover:border-brand-emerald/50 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all"><i data-lucide="database" class="w-10 h-10 md:w-12 md:h-12 text-brand-emerald"></i></div>
+                            <h3 class="text-sm md:text-lg font-bold text-zinc-200 uppercase tracking-widest">3. Store</h3>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-2 text-center max-w-[120px] leading-relaxed">SQLite with deduplication</p>
+                        </div>
+                        <div class="anim-scale-up delay-800 flex flex-col items-center z-10 p-4 group">
+                            <div class="w-20 h-20 md:w-28 md:h-28 rounded-2xl border border-white/10 bg-[#09090b] flex items-center justify-center mb-4 md:mb-6 group-hover:border-yellow-400/50 group-hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all"><i data-lucide="bar-chart-2" class="w-10 h-10 md:w-12 md:h-12 text-yellow-400"></i></div>
+                            <h3 class="text-sm md:text-lg font-bold text-zinc-200 uppercase tracking-widest">4. Visualize</h3>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-2 text-center max-w-[120px] leading-relaxed">Statistical Seaborn graphs</p>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Step 1: Environment',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[45%] space-y-5 text-left">
+                        <div class="anim-fade-up inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-400 font-mono mb-2">/init_config.py</div>
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight">Step 1: Environment</h2>
+                        <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 leading-relaxed">
+                            System stability is critical. I strictly constrained the environment to <code class="bg-white/10 px-1.5 py-0.5 rounded text-brand-blue font-mono border border-white/5">numpy&lt;2.0</code> to prevent major Application Binary Interface (ABI) incompatibilities between Pandas and the underlying math arrays.
+                        </p>
+                        <div class="flex flex-wrap gap-2.5 pt-4">
+                            ${['pandas', 'jobspy', 'google.genai', 'sqlite3'].map((lib, i) => `
+                                <div class="anim-fade-up px-3 py-1.5 bg-zinc-900 border border-white/5 rounded-lg text-xs md:text-sm font-mono text-zinc-300 flex items-center shadow-lg" style="transition-delay: ${300 + i*100}ms">
+                                    <div class="w-2 h-2 rounded-full bg-brand-emerald mr-2.5 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>${lib}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="w-full md:w-[55%] flex-1 min-h-0">
+                        ${CodeEditor("init_config.py", [
+                            '<span class="text-brand-rose">import</span> <span class="text-zinc-200">google.generativeai</span> <span class="text-brand-rose">as</span> <span class="text-zinc-200">genai</span>',
+                            '<span class="text-brand-rose">import</span> <span class="text-zinc-200">sqlite3, json, time</span>',
+                            '<span class="text-brand-rose">from</span> <span class="text-zinc-200">jobspy</span> <span class="text-brand-rose">import</span> <span class="text-zinc-200">scrape_jobs</span>',
+                            '',
+                            '<span class="text-zinc-500 italic"># Configure Gemini 2.0 Flash SDK</span>',
+                            'GEMINI_API_KEY = <span class="text-yellow-300">"AIzaSy..."</span>',
+                            'genai.configure(api_key=GEMINI_API_KEY)',
+                            'model = genai.GenerativeModel(<span class="text-yellow-300">\'gemini-2.0-flash\'</span>)',
+                            '',
+                            '<span class="text-zinc-500 italic"># Set Search Parameters</span>',
+                            'CATEGORIES = [<span class="text-yellow-300">"Software Engineer"</span>, <span class="text-yellow-300">"Data Analyst"</span>]',
+                            'LOCATIONS = [<span class="text-yellow-300">"India"</span>, <span class="text-yellow-300">"Remote"</span>]'
+                        ], 500)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Step 2: Database Setup',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[55%] order-2 md:order-1 flex-1 min-h-0">
+                        ${CodeEditor("database.py", [
+                            '<span class="text-brand-rose">def</span> <span class="text-brand-blue">setup_database</span>():',
+                            '    conn = sqlite3.connect(<span class="text-yellow-300">"jobs.db"</span>)',
+                            '    cursor = conn.cursor()',
+                            '    cursor.execute(<span class="text-yellow-300">"""</span>',
+                            '        <span class="text-brand-magenta">CREATE TABLE IF NOT EXISTS</span> jobs (',
+                            '            id <span class="text-brand-emerald">INTEGER PRIMARY KEY</span>,',
+                            '            title <span class="text-brand-emerald">TEXT</span>,',
+                            '            company <span class="text-brand-emerald">TEXT</span>,',
+                            '            job_url <span class="text-brand-emerald">TEXT UNIQUE</span>, <span class="text-zinc-500 italic">-- Prevents duplicates</span>',
+                            '            description <span class="text-brand-emerald">TEXT</span>,',
+                            '            is_fake <span class="text-brand-emerald">BOOLEAN</span>,',
+                            '            experience_level <span class="text-brand-emerald">TEXT</span>',
+                            '        )',
+                            '    <span class="text-yellow-300">"""</span>)',
+                            '    conn.commit()'
+                        ], 200)}
+                    </div>
+                    <div class="w-full md:w-[45%] order-1 md:order-2 space-y-5 text-left">
+                        <div class="anim-fade-up inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-400 font-mono mb-2">/database.py</div>
+                        <h2 class="anim-text-reveal delay-100 text-3xl md:text-5xl font-extrabold text-white tracking-tight">Step 2: Persistent Storage</h2>
+                        <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 leading-relaxed">
+                            To maintain state across multiple execution cycles, I instantiated a lightweight <span class="text-white font-medium">SQLite database</span>. 
+                        </p>
+                        <div class="anim-fade-up delay-400 p-5 bg-brand-emerald/10 border border-brand-emerald/20 rounded-2xl mt-6 shadow-[0_10px_30px_rgba(16,185,129,0.15)]">
+                            <h4 class="text-brand-emerald text-base font-bold mb-2 flex items-center"><i data-lucide="shield-alert" class="w-5 h-5 mr-2"></i> Deduplication Safeguard</h4>
+                            <p class="text-zinc-300 text-xs md:text-sm leading-relaxed">
+                                The schema enforces <code class="font-mono text-brand-emerald bg-brand-emerald/10 px-1 py-0.5 rounded">job_url TEXT UNIQUE</code>. Before any insertion, the script verifies uniqueness, ensuring we don't skew our statistics by analyzing the same job twice across different runs.
+                            </p>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Step 3: Web Scraping',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-5xl mx-auto h-full px-6 text-center py-4">
+                    <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold mb-4 text-white tracking-tight">Step 3: Automated Scraping</h2>
+                    <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 mb-8 font-light leading-relaxed max-w-3xl mx-auto">
+                        Using the JobSpy library, the agent automatically iterates through job categories and locations, pulling fresh, real-time data from major portals.
+                    </p>
+                    <div class="mx-auto w-full text-left flex-1 min-h-0">
+                        ${CodeEditor("scraper.py", [
+                            '<span class="text-brand-rose">for</span> role <span class="text-brand-rose">in</span> CATEGORIES:',
+                            '    <span class="text-brand-rose">for</span> loc <span class="text-brand-rose">in</span> LOCATIONS:',
+                            '        <span class="text-zinc-500 italic"># Fetch live listings</span>',
+                            '        jobs_df = <span class="text-brand-blue">scrape_jobs</span>(',
+                            '            site_name=[<span class="text-yellow-300">"indeed"</span>, <span class="text-yellow-300">"linkedin"</span>],',
+                            '            search_term=role,',
+                            '            location=loc,',
+                            '            results_wanted=<span class="text-brand-emerald">3</span>,',
+                            '            hours_old=<span class="text-brand-emerald">24</span> <span class="text-zinc-500 italic"># Strictly fetch fresh jobs</span>',
+                            '        )',
+                            '        ',
+                            '        <span class="text-zinc-500 italic"># Pass each row to Gemini AI Evaluation Engine</span>',
+                            '        <span class="text-brand-rose">for</span> index, row <span class="text-brand-rose">in</span> jobs_df.iterrows():',
+                            '            is_fake, exp = <span class="text-brand-blue">analyze_job</span>(row[<span class="text-yellow-300">\'title\'</span>], row[<span class="text-yellow-300">\'desc\'</span>])',
+                            '            <span class="text-brand-blue">save_to_db</span>(row, is_fake, exp)'
+                        ], 400)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Step 4: LLM Integration',
+                html: `
+                <div class="w-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto h-full px-6">
+                    <div class="anim-scale-up p-6 md:p-8 bg-gradient-to-br from-brand-blue/20 to-brand-magenta/20 border border-white/10 rounded-3xl mb-8 shadow-[0_0_60px_rgba(217,70,239,0.3)]">
+                        <i data-lucide="cpu" class="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-lg animate-float"></i>
+                    </div>
+                    <h2 class="anim-text-reveal delay-200 text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-white tracking-tight leading-tight">Step 4: Semantic LLM Integration</h2>
+                    <p class="anim-text-reveal delay-400 text-base md:text-xl lg:text-2xl text-zinc-300 font-light leading-relaxed max-w-3xl">
+                        By integrating <span class="text-white font-bold">Google's Gemini 2.0 Flash</span> model via the Generative AI SDK, the system moves beyond brittle keyword matching. It utilizes true semantic understanding to evaluate complex, nuanced job descriptions to uncover hidden fraud.
+                    </p>
+                </div>`
+            },
+            {
+                title: 'Step 5: Prompt Engineering',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[45%] space-y-6 text-left">
+                        <div class="anim-fade-up inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-400 font-mono mb-2">/ai_engine.py</div>
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">Step 5: Strict Prompt Engineering</h2>
+                        <div class="anim-fade-up delay-200 p-5 rounded-2xl bg-zinc-900 border border-white/5 relative mt-4 shadow-xl">
+                            <i data-lucide="quote" class="absolute top-4 right-4 w-6 h-6 text-white/10 rotate-180"></i>
+                            <p class="text-zinc-300 text-sm md:text-base font-light italic pr-6 leading-relaxed">
+                                "At first, the AI returned long paragraphs of text, which immediately crashed my SQL database."
+                            </p>
+                        </div>
+                        <p class="anim-text-reveal delay-400 text-zinc-400 text-sm md:text-lg leading-relaxed">
+                            I overcame this by applying <span class="text-white font-bold">strict Prompt Engineering</span>. I explicitly commanded the model to return its evaluation in a structured JSON format, ensuring the Python script could reliably parse the response every single time.
+                        </p>
+                    </div>
+                    <div class="w-full md:w-[55%] flex-1 min-h-0">
+                        ${CodeEditor("ai_engine.py", [
+                            '<span class="text-brand-rose">def</span> <span class="text-brand-blue">analyze</span>(title, desc):',
+                            '    prompt = <span class="text-yellow-300">f"""</span>',
+                            '        <span class="text-yellow-300">Analyze this job posting.</span>',
+                            '        <span class="text-yellow-300">Job Title:</span> <span class="text-brand-blue">{title}</span>',
+                            '        <span class="text-yellow-300">Description:</span> <span class="text-brand-blue">{desc}</span>',
+                            '        ',
+                            '        <span class="text-yellow-300 font-bold">Return ONLY valid JSON format:</span>',
+                            '        <span class="text-brand-emerald">{{ "is_scam": false, "experience": "Fresher" }}</span>',
+                            '    <span class="text-yellow-300">"""</span>',
+                            '    res = model.<span class="text-brand-magenta">generate_content</span>(prompt)',
+                            '    <span class="text-zinc-500 italic"># Clean markdown backticks to prevent JSON errors</span>',
+                            '    data = json.<span class="text-brand-magenta">loads</span>(res.text.replace(<span class="text-yellow-300">\'\\\`\\\`\\\`json\'</span>, <span class="text-yellow-300">\'\'</span>))',
+                            '    <span class="text-brand-rose">return</span> data.get(<span class="text-yellow-300">"is_scam"</span>), data.get(<span class="text-yellow-300">"experience"</span>)'
+                        ], 500)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Step 6: Auditory Feedback',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[55%] order-2 md:order-1 flex-1 min-h-0">
+                        ${CodeEditor("audio.py", [
+                            '<span class="text-brand-rose">from</span> <span class="text-zinc-200">gtts</span> <span class="text-brand-rose">import</span> <span class="text-zinc-200">gTTS</span>',
+                            '<span class="text-brand-rose">from</span> <span class="text-zinc-200">IPython.display</span> <span class="text-brand-rose">import</span> <span class="text-zinc-200">display, Audio</span>',
+                            '',
+                            '<span class="text-brand-rose">def</span> <span class="text-brand-blue">read_latest_job</span>():',
+                            '    <span class="text-zinc-500 italic"># Query DB for newest SAFE job</span>',
+                            '    job = <span class="text-brand-blue">query</span>(<span class="text-yellow-300">"SELECT * FROM jobs WHERE is_fake=0"</span>)',
+                            '    txt = <span class="text-yellow-300">f"Safe job: {job[\'title\']} at {job[\'company\']}."</span>',
+                            '',
+                            '    <span class="text-zinc-500 italic"># Generate Google Text-to-Speech</span>',
+                            '    tts = <span class="text-brand-blue">gTTS</span>(text=txt, lang=<span class="text-yellow-300">\'en\'</span>)',
+                            '    tts.save(<span class="text-yellow-300">"latest_job.mp3"</span>)',
+                            '    <span class="text-brand-blue">display</span>(Audio(<span class="text-yellow-300">"latest_job.mp3"</span>, autoplay=<span class="text-brand-rose">True</span>))'
+                        ], 300)}
+                    </div>
+                    <div class="w-full md:w-[45%] order-1 md:order-2 space-y-5 text-left">
+                        <div class="anim-fade-up inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-400 font-mono mb-2">/audio.py</div>
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight">Step 6: Auditory Feedback</h2>
+                        <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 leading-relaxed">
+                            For enhanced accessibility, I integrated the <span class="text-white font-bold">Google Text-to-Speech (gTTS) API</span>.
+                        </p>
+                        <div class="anim-slide-right delay-400 p-5 bg-zinc-900 border border-white/5 rounded-2xl mt-5 flex items-start shadow-xl">
+                            <i data-lucide="mic" class="w-6 h-6 text-brand-magenta mr-4 shrink-0 mt-0.5"></i>
+                            <p class="text-zinc-300 text-sm md:text-base leading-relaxed">
+                                The system converts the most recently validated, non-fraudulent job posting into an audible .mp3 format, reading it aloud directly in the terminal interface.
+                            </p>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Synthetic Validation',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[45%] space-y-5 text-left">
+                        <div class="anim-fade-up inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-400 font-mono mb-2">/seed_data.py</div>
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">Synthetic Seeding</h2>
+                        <p class="anim-text-reveal delay-200 text-zinc-400 text-sm md:text-lg leading-relaxed">
+                            To rigorously test the database constraints and visualization pipelines without waiting for live web scraping cycles, I implemented a controlled dataset generation script.
+                        </p>
+                        <div class="anim-fade-up delay-400 p-5 bg-brand-violet/10 border border-brand-violet/20 rounded-2xl mt-5 flex items-start shadow-[0_10px_30px_rgba(139,92,246,0.15)]">
+                            <i data-lucide="flask-conical" class="w-6 h-6 text-brand-violet mr-4 shrink-0 mt-0.5"></i>
+                            <p class="text-zinc-300 text-sm md:text-base leading-relaxed">
+                                It utilizes <code class="font-mono text-brand-violet font-bold">executemany()</code> alongside parameterized queries to inject explicitly "Safe" and "Fake" jobs, proving the dashboard accurately plots the AI's detection ratios.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-[55%] flex-1 min-h-0">
+                        ${CodeEditor("seed_data.py", [
+                            '<span class="text-zinc-500 italic"># Generate realistic mock dataset with varying dates</span>',
+                            'mock_data = [',
+                            '    (<span class="text-yellow-300">"Software Engineer"</span>, <span class="text-yellow-300">"TechNova"</span>, <span class="text-brand-rose">False</span>, <span class="text-yellow-300">"Experienced"</span>),',
+                            '    (<span class="text-yellow-300">"Data Entry Operator"</span>, <span class="text-yellow-300">"EasyMoney"</span>, <span class="text-brand-rose">True</span>, <span class="text-yellow-300">"Fresher"</span>),',
+                            '    (<span class="text-yellow-300">"Frontend Developer"</span>, <span class="text-yellow-300">"WebStudio"</span>, <span class="text-brand-rose">False</span>, <span class="text-yellow-300">"Fresher"</span>)',
+                            ']',
+                            '',
+                            '<span class="text-zinc-500 italic"># Safely batch insert the mock data</span>',
+                            'cursor.<span class="text-brand-magenta">executemany</span>(<span class="text-yellow-300">"""</span>',
+                            '    <span class="text-brand-magenta">INSERT INTO</span> found_jobs ',
+                            '    (title, company, is_fake, experience_level)',
+                            '    <span class="text-brand-magenta">VALUES</span> (?, ?, ?, ?)',
+                            '<span class="text-yellow-300">"""</span>, mock_data)',
+                            'conn.commit()'
+                        ], 500)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Database Integrity',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-6xl mx-auto h-full px-6 pt-4">
+                    <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-5 text-center">Tabular Data Verification</h2>
+                    <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 mb-8 text-center max-w-3xl mx-auto leading-relaxed">Before generating complex statistical visualizations, we convert the raw SQL data into a <span class="text-white font-bold">Pandas DataFrame</span> to manually inspect and validate the AI-generated classifications.</p>
+                    <div class="anim-fade-up delay-400 overflow-hidden w-full bg-zinc-900/50 border border-white/10 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                        <table class="w-full text-left text-xs md:text-sm text-zinc-300 table-fixed">
+                            <thead class="bg-[#09090b] text-brand-blue uppercase tracking-widest border-b border-white/10 font-bold">
+                                <tr><th class="p-4 md:p-5 w-16 text-center">ID</th><th class="p-4 md:p-5 w-1/3">Job Title</th><th class="p-4 md:p-5">Company</th><th class="p-4 md:p-5 hidden sm:table-cell">Experience</th><th class="p-4 md:p-5 text-center">Status</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr class="hover:bg-white/5 transition-colors"><td class="p-4 md:p-5 text-center text-zinc-500 font-mono">1</td><td class="p-4 md:p-5 text-white font-medium truncate">NodeJs Backend Developer</td><td class="p-4 md:p-5 truncate">SEO Quartz</td><td class="p-4 md:p-5 hidden sm:table-cell">Experienced</td><td class="p-4 md:p-5 text-center"><span class="px-3 py-1 rounded bg-brand-emerald/10 text-brand-emerald font-bold border border-brand-emerald/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">Safe</span></td></tr>
+                                <tr class="hover:bg-white/5 transition-colors"><td class="p-4 md:p-5 text-center text-zinc-500 font-mono">2</td><td class="p-4 md:p-5 text-white font-medium truncate">Data Entry Operator</td><td class="p-4 md:p-5 truncate">EasyMoney Jobs</td><td class="p-4 md:p-5 hidden sm:table-cell">Fresher</td><td class="p-4 md:p-5 text-center"><span class="px-3 py-1 rounded bg-brand-rose/10 text-brand-rose font-bold border border-brand-rose/20 shadow-[0_0_10px_rgba(244,63,94,0.1)]">Fake</span></td></tr>
+                                <tr class="hover:bg-white/5 transition-colors"><td class="p-4 md:p-5 text-center text-zinc-500 font-mono">3</td><td class="p-4 md:p-5 text-white font-medium truncate">React Developer</td><td class="p-4 md:p-5 truncate">AEVEVO TECH</td><td class="p-4 md:p-5 hidden sm:table-cell">Unknown</td><td class="p-4 md:p-5 text-center"><span class="px-3 py-1 rounded bg-brand-emerald/10 text-brand-emerald font-bold border border-brand-emerald/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">Safe</span></td></tr>
+                                <tr class="hover:bg-white/5 transition-colors"><td class="p-4 md:p-5 text-center text-zinc-500 font-mono">4</td><td class="p-4 md:p-5 text-white font-medium truncate">Crypto Fast Cash Web Dev</td><td class="p-4 md:p-5 truncate">Global Ads</td><td class="p-4 md:p-5 hidden sm:table-cell">Fresher</td><td class="p-4 md:p-5 text-center"><span class="px-3 py-1 rounded bg-brand-rose/10 text-brand-rose font-bold border border-brand-rose/20 shadow-[0_0_10px_rgba(244,63,94,0.1)]">Fake</span></td></tr>
+                                <tr class="hover:bg-white/5 transition-colors"><td class="p-4 md:p-5 text-center text-zinc-500 font-mono">5</td><td class="p-4 md:p-5 text-white font-medium truncate">Senior Data Analyst</td><td class="p-4 md:p-5 truncate">Stripe</td><td class="p-4 md:p-5 hidden sm:table-cell">Experienced</td><td class="p-4 md:p-5 text-center"><span class="px-3 py-1 rounded bg-brand-emerald/10 text-brand-emerald font-bold border border-brand-emerald/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">Safe</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Data Visualization',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-6xl mx-auto h-full px-6 pt-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight">Analytics Dashboard</h2>
+                            <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 mt-2">Transforms SQLite data into visual <span class="text-brand-blue font-bold">Seaborn-style dashboards</span>.</p>
+                        </div>
+                        <i data-lucide="layout-dashboard" class="w-8 h-8 text-zinc-600 hidden sm:block anim-scale-up delay-300"></i>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6 flex-1 min-h-0">
+                        ${DoughnutChart('Scam Detection Ratio', 94.1, 100)}
+                        ${BarChartVertical('Experience Demand', [
+                            {label: 'Fresher', val: 35, color: 'bg-brand-blue', shadowColor: 'rgba(59,130,246,0.3)'}, 
+                            {label: 'Experienced', val: 65, color: 'bg-brand-magenta', shadowColor: 'rgba(217,70,239,0.3)'}
+                        ], 200)}
+                        ${BarChartHorizontal('Geographical Mapping', [
+                            {label: 'On-site Roles', val: 55, color: 'bg-brand-magenta', shadowColor: 'rgba(217,70,239,0.3)'}, 
+                            {label: 'Remote Roles', val: 45, color: 'bg-brand-rose', shadowColor: 'rgba(244,63,94,0.3)'}
+                        ], 300)}
+                        ${AreaChart('Collection Timeline', 400)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Model Evaluation',
+                html: `
+                <div class="w-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto h-full px-6">
+                    <div class="anim-scale-up p-6 md:p-8 bg-zinc-900 border border-white/10 rounded-3xl mb-8 shadow-[0_0_60px_rgba(217,70,239,0.2)]">
+                        <i data-lucide="microscope" class="w-16 h-16 md:w-20 md:h-20 text-brand-magenta animate-float"></i>
+                    </div>
+                    <h2 class="anim-text-reveal delay-200 text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">Model Evaluation</h2>
+                    <p class="anim-text-reveal delay-400 text-lg md:text-2xl text-zinc-400 font-light leading-relaxed max-w-3xl">
+                        To quantitatively validate Gemini's efficacy in classifying fraudulent postings, we apply standard machine learning evaluation metrics against a <span class="text-white font-bold">100-job synthetic benchmark dataset</span>.
+                    </p>
+                </div>`
+            },
+            {
+                title: 'Primary Metrics',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-5xl mx-auto h-full px-6">
+                    <div class="flex items-center justify-between mb-6 md:mb-8">
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight">Primary LLM Metrics</h2>
+                        <span class="anim-scale-up delay-200 text-xs md:text-sm font-mono font-bold text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded border border-white/10 shadow-lg">n = 100 benchmark</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6 w-full">
+                        ${MetricRow('target', 'Accuracy', '92.0%', 'Overall Correctness', 'text-brand-blue', 100)}
+                        ${MetricRow('shield-check', 'Precision', '84.4%', 'Real Scams vs False Alarms', 'text-brand-violet', 200)}
+                        ${MetricRow('activity', 'Recall', '90.0%', 'Threats Intercepted', 'text-brand-emerald', 300)}
+                        ${MetricRow('zap', 'F1 Score', '87.1%', 'Algorithmic Stability', 'text-brand-magenta', 400)}
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Confusion Matrix',
+                html: `
+                <div class="w-full flex flex-col justify-center max-w-5xl mx-auto h-full px-6 text-center">
+                    <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold mb-3 text-white tracking-tight">Granular Confusion Matrix</h2>
+                    <p class="anim-text-reveal delay-200 text-sm md:text-lg text-zinc-400 mb-10 font-light max-w-3xl mx-auto">
+                        Detailed breakdown of how the Gemini AI model classified safe jobs vs. fraudulent postings.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-2xl mx-auto relative mt-4 md:mt-8">
+                        <div class="anim-fade delay-400 hidden md:block absolute -left-16 lg:-left-24 top-[20%] text-zinc-500 text-xs font-bold tracking-[0.25em] -rotate-90 origin-right uppercase">Actual Safe</div>
+                        <div class="anim-fade delay-400 hidden md:block absolute -left-16 lg:-left-24 bottom-[20%] text-zinc-500 text-xs font-bold tracking-[0.25em] -rotate-90 origin-right uppercase">Actual Scam</div>
+                        <div class="anim-fade delay-400 hidden md:block absolute -top-8 lg:-top-10 left-1/4 text-zinc-500 text-xs font-bold tracking-[0.25em] -translate-x-1/2 uppercase">Predicted Safe</div>
+                        <div class="anim-fade delay-400 hidden md:block absolute -top-8 lg:-top-10 right-1/4 text-zinc-500 text-xs font-bold tracking-[0.25em] translate-x-1/2 uppercase">Predicted Scam</div>
+
+                        ${MatrixCell('True Negative', '65', 'Correctly identified Safe job', 'success', 200)}
+                        ${MatrixCell('False Positive', '5', 'False Alarm (Flagged Safe)', 'warning', 300)}
+                        ${MatrixCell('False Negative', '3', 'Missed Scam (Labeled Safe)', 'danger', 400)}
+                        ${MatrixCell('True Positive', '27', 'Correctly identified Scam', 'success_scam', 500)}
+                    </div>
+                </div>`
+            },
+            { 
+                title: 'Accuracy Dashboard', 
+                html: MetricDeepDive(
+                    'System Accuracy', '92.0%', '(TP + TN) / Total',
+                    'The overall percentage of jobs (both safe and fake) categorized correctly. Proves the general viability of the LLM.',
+                    { title: 'Distribution', percent: 92.0, label1: 'Correct', label2: 'Error', color1: 'bg-brand-blue', color2: 'bg-brand-rose' },
+                    { title: 'Predictive Yield', footer: 'Out of 100 Synthesized Jobs', items: [
+                        { label: 'Accurate Predictions', val: 92, percent: 92, color: 'bg-brand-blue' },
+                        { label: 'Misclassifications', val: 8, percent: 8, color: 'bg-brand-rose' }
+                    ]},
+                    { title: 'LLM vs Keyword', label1: 'Legacy Filter', val1: 65.0, label2: 'Gemini Agent', val2: 92.0, color2: 'bg-brand-blue' },
+                    'text-brand-blue', 'rgba(59,130,246,0.5)', 100
+                ) 
+            },
+            { 
+                title: 'Precision Dashboard', 
+                html: MetricDeepDive(
+                    'System Precision', '84.4%', 'TP / (TP + FP)',
+                    'Out of all jobs the AI flagged as Scams, how many were actually Scams? High precision protects candidates from losing safe opportunities to false alarms.',
+                    { title: 'Flagged Jobs', percent: 84.4, label1: 'Real Scams', label2: 'Safe Lost', color1: 'bg-brand-violet', color2: 'bg-yellow-500' },
+                    { title: 'Cost of False Alarms', footer: 'Total Flagged Scams (32)', items: [
+                        { label: 'Real Scams Caught (TP)', val: 27, percent: 84.4, color: 'bg-brand-violet' },
+                        { label: 'Safe Jobs Lost (FP)', val: 5, percent: 15.6, color: 'bg-yellow-500' }
+                    ]},
+                    { title: 'Context vs Words', label1: 'Basic Filter', val1: 45.0, label2: 'Gemini Agent', val2: 84.4, color2: 'bg-brand-violet' },
+                    'text-brand-violet', 'rgba(139,92,246,0.5)', 100
+                ) 
+            },
+            { 
+                title: 'Recall Dashboard', 
+                html: MetricDeepDive(
+                    'System Recall (Safety)', '90.0%', 'TP / (TP + FN)',
+                    'The critical safety threshold. Out of all the real Scams hidden in the market, how many did the AI successfully intercept?',
+                    { title: 'Threat Mitigation', percent: 90.0, label1: 'Intercepted', label2: 'Missed', color1: 'bg-brand-emerald', color2: 'bg-brand-rose' },
+                    { title: 'System Vulnerability', footer: 'Total Existing Scams (30)', items: [
+                        { label: 'Caught by AI (TP)', val: 27, percent: 90, color: 'bg-brand-emerald' },
+                        { label: 'Slipped Through (FN)', val: 3, percent: 10, color: 'bg-brand-rose' }
+                    ]},
+                    { title: 'Dynamic vs Static', label1: 'Static Filter', val1: 55.0, label2: 'Gemini Agent', val2: 90.0, color2: 'bg-brand-emerald' },
+                    'text-brand-emerald', 'rgba(16,185,129,0.5)', 100
+                ) 
+            },
+            { 
+                title: 'F1 Score Dashboard', 
+                html: MetricDeepDive(
+                    'System F1 Score', '87.1%', '2 × (P × R) / (P + R)',
+                    'The harmonic mean. This mathematically proves that the AI successfully balances the trade-off between generating false alarms and missing real threats.',
+                    { title: 'Harmonic Balance', percent: 87.1, label1: 'F1 Score', label2: 'Error Margin', color1: 'bg-brand-magenta', color2: 'bg-zinc-200' },
+                    { title: 'Metric Equilibrium', footer: 'Score Distribution', items: [
+                        { label: 'Precision (No False Alarms)', val: 84.4, percent: 84.4, isPercent: true, color: 'bg-brand-violet' },
+                        { label: 'Recall (No Missed Scams)', val: 90.0, percent: 90.0, isPercent: true, color: 'bg-brand-emerald' },
+                        { label: 'F1 Score (Balanced)', val: 87.1, percent: 87.1, isPercent: true, color: 'bg-brand-magenta' }
+                    ]},
+                    { title: 'Resolving Trade-off', label1: 'Rule-Based', val1: 50.0, label2: 'Gemini Agent', val2: 87.1, color2: 'bg-brand-magenta' },
+                    'text-brand-magenta', 'rgba(217,70,239,0.5)', 100
+                ) 
+            },
+            {
+                title: 'ROC Curve',
+                html: `
+                <div class="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14 max-w-5xl mx-auto h-full px-6">
+                    <div class="w-full md:w-[45%] space-y-5 md:space-y-6 text-center md:text-left">
+                        <h2 class="anim-text-reveal text-3xl md:text-5xl font-extrabold text-white tracking-tight">ROC Curve</h2>
+                        <div class="anim-scale-up delay-200 p-5 md:p-8 bg-zinc-900 border border-white/10 rounded-2xl inline-block shadow-[0_0_40px_rgba(217,70,239,0.2)]">
+                            <div class="text-5xl md:text-7xl font-black text-gradient-primary mb-2">0.94</div>
+                            <div class="text-xs md:text-sm font-bold text-zinc-400 uppercase tracking-widest">Area Under Curve (AUC)</div>
+                        </div>
+                        <p class="anim-text-reveal delay-400 text-zinc-300 text-sm md:text-lg font-light leading-relaxed">
+                            An AUC of 0.94 demonstrates <span class="text-white font-bold">exceptional diagnostic capacity</span> to distinguish genuine opportunities from scams across all probability thresholds.
+                        </p>
+                    </div>
+                    
+                    <div class="anim-scale-up delay-400 w-full sm:w-[60%] md:w-[50%] relative aspect-square bg-[#09090b] rounded-2xl border border-white/10 p-6 md:p-8 mx-auto shadow-[0_20px_60px_rgba(0,0,0,0.6)] max-w-[350px]">
+                        <div class="absolute inset-6 md:inset-8 border-l-2 border-b-2 border-zinc-600">
+                            <svg class="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                                <line x1="0" y1="100%" x2="100%" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="6 6"></line>
+                                <path d="M 0,100 L 0,30 L 10,10 L 40,5 L 100,0" fill="none" stroke="#d946ef" stroke-width="4" class="path-animation-roc drop-shadow-[0_0_12px_rgba(217,70,239,0.8)]"></path>
+                                <path d="M 0,100 L 0,30 L 10,10 L 40,5 L 100,0 L 100,100 Z" fill="rgba(217,70,239,0.15)" class="fill-animation"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-widest">False Positive Rate</div>
+                        <div class="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left translate-x-3 text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-widest whitespace-nowrap">True Positive Rate</div>
+                    </div>
+                </div>`
+            },
+            {
+                title: 'Conclusion',
+                html: `
+                <div class="w-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto h-full px-6">
+                    <div class="anim-scale-up p-6 md:p-8 bg-gradient-to-br from-brand-blue/20 to-brand-magenta/20 rounded-full mb-8 border border-white/10 shadow-[0_0_60px_rgba(217,70,239,0.3)]">
+                        <i data-lucide="rocket" class="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-lg animate-float"></i>
+                    </div>
+                    <h2 class="anim-text-reveal delay-200 text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+                        Future Scope
+                    </h2>
+                    <p class="anim-text-reveal delay-400 text-lg md:text-2xl text-zinc-300 font-light leading-relaxed max-w-3xl">
+                        This Python architecture sets the foundation for a <span class="text-white font-bold">full-stack web application</span>. 
+                        <br/><br/>
+                        Future iterations will expose these pipelines via APIs, allowing for real-time automated <span class="text-brand-blue font-bold">resume matching</span> against verified, safe job listings.
+                    </p>
+                </div>`
+            },
+            {
+                title: 'Thank You',
+                html: `
+                <div class="relative w-full flex flex-col justify-center items-center text-center max-w-6xl mx-auto h-full px-6 overflow-hidden">
+                    <!-- Dynamic Glowing Orbs -->
+                    <div class="absolute top-1/3 left-1/4 w-72 h-72 bg-brand-blue/20 rounded-full blur-[120px] animate-pulse-slow pointer-events-none mix-blend-screen"></div>
+                    <div class="absolute bottom-1/3 right-1/4 w-72 h-72 bg-brand-magenta/20 rounded-full blur-[120px] animate-pulse-slow pointer-events-none mix-blend-screen" style="animation-delay: 1s;"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-violet/10 rounded-full blur-[150px] animate-float pointer-events-none mix-blend-screen"></div>
+
+                    <!-- Content -->
+                    <div class="z-10 flex flex-col items-center relative">
+                        <div class="anim-scale-up p-5 md:p-8 bg-zinc-900/40 backdrop-blur-2xl rounded-full border border-white/10 shadow-[0_0_80px_rgba(217,70,239,0.3)] mb-8 md:mb-12">
+                            <i data-lucide="sparkles" class="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-lg animate-float"></i>
+                        </div>
+                        
+                        <h1 class="anim-text-reveal delay-200 text-5xl md:text-7xl lg:text-8xl font-black text-gradient-primary leading-none mb-8 tracking-tighter drop-shadow-2xl pb-2">
+                            Thank You
+                        </h1>
+                        
+                        <div class="anim-fade-up delay-500 h-[2px] w-40 bg-gradient-to-r from-transparent via-white/50 to-transparent mb-10"></div>
+                        
+                        <h2 class="anim-text-reveal delay-600 text-2xl md:text-3xl lg:text-4xl text-zinc-300 font-light tracking-wide mb-4 md:mb-6">
+                            From <span class="text-white font-extrabold">Venkata Sai Tamarapalli</span>
+                        </h2>
+                        
+                        <div class="anim-text-reveal delay-800 px-6 py-2 md:px-8 md:py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                            <p class="text-brand-magenta text-sm md:text-xl font-bold tracking-[0.3em] uppercase">
+                                & The Entire Team
+                            </p>
+                        </div>
+                        
+                        <div class="anim-fade-up delay-1000 mt-10 md:mt-12 flex items-center justify-center space-x-3 bg-zinc-900/60 px-6 py-3 rounded-full border border-white/5 shadow-lg backdrop-blur-sm">
+                            <i data-lucide="message-circle-question" class="w-5 h-5 text-brand-emerald animate-pulse"></i>
+                            <span class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-zinc-200">Open for Questions</span>
+                        </div>
+                    </div>
+                </div>`
+            }
+        ];
+
+        // --- CONTROLLER ---
+        let currentSlide = 0;
+        let isAnimating = false;
+
+        function init() {
+            const slidesArea = document.getElementById('slides-area');
+            slidesArea.innerHTML = slidesData.map((slide, i) => `
+                <div id="slide-${i}" class="slide-wrapper absolute inset-0 overflow-y-auto flex flex-col items-center justify-center transition-all duration-[800ms] ease-spring transform opacity-0 translate-x-full scale-95 z-0">
+                    ${slide.html}
+                </div>
+            `).join('');
+
+            const dotsContainer = document.getElementById('dots-container');
+            dotsContainer.innerHTML = slidesData.map((_, i) => `
+                <button onclick="goToSlide(${i})" id="dot-${i}" class="h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out bg-zinc-700 w-1.5 md:w-2 hover:bg-zinc-500 shrink-0"></button>
+            `).join('');
+
+            lucide.createIcons();
+            updateView();
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            });
+        }
+
+        function updateView() {
+            slidesData.forEach((_, i) => {
+                const el = document.getElementById(`slide-${i}`);
+                if (i === currentSlide) {
+                    el.className = 'slide-wrapper is-active absolute inset-0 overflow-y-auto flex flex-col items-center justify-center transition-all duration-[800ms] ease-spring transform opacity-100 translate-x-0 scale-100 z-10';
+                    setTimeout(() => { el.scrollTop = 0; }, 50);
+                } else if (i < currentSlide) {
+                    el.className = 'slide-wrapper absolute inset-0 overflow-y-auto flex flex-col items-center justify-center transition-all duration-[800ms] ease-spring transform opacity-0 -translate-x-full scale-90 z-0';
+                } else {
+                    el.className = 'slide-wrapper absolute inset-0 overflow-y-auto flex flex-col items-center justify-center transition-all duration-[800ms] ease-spring transform opacity-0 translate-x-full scale-90 z-0';
+                }
+            });
+
+            document.getElementById('progress-fill').style.width = `${((currentSlide + 1) / slidesData.length) * 100}%`;
+            document.getElementById('slide-title-display').innerHTML = `${slidesData[currentSlide].title} <span class="text-zinc-600 mx-2 md:mx-3">|</span> ${currentSlide + 1}/${slidesData.length}`;
+
+            slidesData.forEach((_, i) => {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i === currentSlide) {
+                    dot.className = 'h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out bg-brand-blue w-5 md:w-6 shadow-[0_0_15px_rgba(59,130,246,0.6)] shrink-0';
+                } else {
+                    dot.className = 'h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out bg-zinc-700 w-1.5 md:w-2 hover:bg-zinc-500 shrink-0';
+                }
+            });
+
+            const btnPrev = document.getElementById('btn-prev');
+            btnPrev.disabled = currentSlide === 0;
+            btnPrev.style.opacity = currentSlide === 0 ? "0.5" : "1";
+            btnPrev.style.cursor = currentSlide === 0 ? "not-allowed" : "pointer";
+
+            const btnNext = document.getElementById('btn-next');
+            btnNext.disabled = currentSlide === slidesData.length - 1;
+            btnNext.style.opacity = currentSlide === slidesData.length - 1 ? "0.5" : "1";
+            btnNext.style.cursor = currentSlide === slidesData.length - 1 ? "not-allowed" : "pointer";
+        }
+
+        function nextSlide() {
+            if (currentSlide < slidesData.length - 1 && !isAnimating) {
+                isAnimating = true;
+                currentSlide++;
+                updateView();
+                setTimeout(() => isAnimating = false, 800);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0 && !isAnimating) {
+                isAnimating = true;
+                currentSlide--;
+                updateView();
+                setTimeout(() => isAnimating = false, 800);
+            }
+        }
+
+        function goToSlide(index) {
+            if (index !== currentSlide && !isAnimating) {
+                isAnimating = true;
+                currentSlide = index;
+                updateView();
+                setTimeout(() => isAnimating = false, 800);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
